@@ -13,6 +13,7 @@ def get_currencies() -> Dict[str, str]:
 def get_latest_rate(from_currency: str, to_currency: str, amount: float) -> dict:
     """Fetch the latest conversion rate and amounts between two currencies."""
     data = get("/latest", params={"from": from_currency, "to": to_currency})
+
     rate = data["rates"][to_currency]
     date = data["date"]
     to_amount = rate * amount
@@ -31,6 +32,7 @@ def get_latest_rate(from_currency: str, to_currency: str, amount: float) -> dict
 def get_historical_rate(date: str, from_currency: str, to_currency: str, amount: float) -> dict:
     """Fetch historical conversion data for a given date."""
     data = get(f"/{date}", params={"from": from_currency, "to": to_currency})
+
     rate = data["rates"][to_currency]
     to_amount = rate * amount
     inverse_rate = 1 / rate
