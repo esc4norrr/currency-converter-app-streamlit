@@ -1,24 +1,34 @@
-# <project title>
+# Currency Converter App
 
 ## Author
-Name: <first and last name>
-Student ID: <UTS student id>
+Name: _Your Name Here_
+Student ID: _Your Student ID_
 
 ## Description
-<What your application does>
-<Some of the challenges you faced>
-<Some of the features you hope to implement in the future>
+Simple Streamlit web application that converts amounts between currencies using
+the [Frankfurter](https://www.frankfurter.app/) API. Users can retrieve the
+latest exchange rates or query historical rates for a specific date.
 
 ## How to Setup
-<Provide a step-by-step description of how to get the development environment set and running.>
-<Which Python version you used>
-<Which packages and version you used>
+1. Ensure you have **Python 3.9+** installed.
+2. Install required packages:
+   ```bash
+   pip install streamlit requests
+   ```
 
 ## How to Run the Program
-<Provide instructions and examples>
+Run the Streamlit application:
+
+```bash
+streamlit run app.py
+```
 
 ## Project Structure
-<List all folders and files of this project and provide quick description for each of them>
+- `app.py` – Streamlit user interface and application logic.
+- `api.py` – Generic HTTP helper for GET requests.
+- `frankfurter.py` – Functions interacting with the Frankfurter API.
+- `currency.py` – Helper functions for rate calculations and formatting.
+- `README.md` – Project documentation.
 
 ## Citations
-<Mention authors and provide links code you source externally>
+Data provided by the [Frankfurter](https://www.frankfurter.app/) API.
