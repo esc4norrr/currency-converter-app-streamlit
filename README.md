@@ -1,20 +1,24 @@
-# Currency Converter App
+# <project title>
 
-Author: Your Name (Student ID: your-id)
+## Author
+Name: <first and last name>
+Student ID: <UTS student id>
 
-This project implements a simple currency converter using [Frankfurter](https://www.frankfurter.app/) data. Users can convert between currencies, view latest and historical rates, and see the inverse conversion rate.
+## Description
+<What your application does>
+<Some of the challenges you faced>
+<Some of the features you hope to implement in the future>
 
-## Python modules
+## How to Setup
+<Provide a step-by-step description of how to get the development environment set and running.>
+<Which Python version you used>
+<Which packages and version you used>
 
-- `api.get(endpoint, params=None)` - helper to perform HTTP GET requests.
-- `frankfurter.get_currencies()` - list available currency codes.
-- `frankfurter.get_latest_rate(from_currency, to_currency, amount)` - latest rate.
-- `frankfurter.get_historical_rate(date, from_currency, to_currency, amount)` - rate on a given date.
-- `currency.format_conversion(data)` - generate display text for results.
+## How to Run the Program
+<Provide instructions and examples>
 
-## Running the app
+## Project Structure
+<List all folders and files of this project and provide quick description for each of them>
 
-```bash
-pip install streamlit requests
-streamlit run app.py
-```
+## Citations
+<Mention authors and provide links code you source externally>

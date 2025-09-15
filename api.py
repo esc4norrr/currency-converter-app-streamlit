@@ -1,19 +1,19 @@
 import requests
 
-BASE_URL = "https://api.frankfurter.app"
-
-
-def get(endpoint: str, params: dict | None = None) -> dict:
-    """Perform a GET request against the Frankfurter API and return JSON data.
+def get_url(url: str) -> (int, str):
+    """
+    Function that will call a provided GET API endpoint url and return its status code and either its content or error message as a string
 
     Parameters
     ----------
-    endpoint:
-        API endpoint starting with a leading ``/`` (e.g. ``"/latest"``).
-    params:
-        Optional dictionary of query string parameters.
+    url : str
+        URL of the GET API endpoint to be called
+
+    Returns
+    -------
+    int
+        API call response status code
+    str
+        Text from API call response
     """
-    url = f"{BASE_URL}{endpoint}"
-    response = requests.get(url, params=params, timeout=30)
-    response.raise_for_status()
-    return response.json()
+

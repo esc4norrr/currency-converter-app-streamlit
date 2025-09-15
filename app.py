@@ -1,32 +1,29 @@
-from __future__ import annotations
-
+import streamlit as st
 import datetime
 
-import streamlit as st
+from frankfurter import get_currencies_list, get_latest_rates, get_historical_rate
+from currency import reverse_rate, round_rate, format_output
 
-from frankfurter import get_currencies, get_historical_rate, get_latest_rate
-from currency import format_conversion
+# Display Streamlit App Title
 
-st.title("Currency Converter")
+# Get the list of available currencies from Frankfurter
 
-currencies = get_currencies()
-codes = sorted(currencies.keys())
+# If the list of available currencies is None, display an error message in Streamlit App
 
-amount = st.number_input("Amount", min_value=0.0, value=1.0)
-from_currency = st.selectbox("From", codes, index=codes.index("EUR") if "EUR" in codes else 0)
-to_currency = st.selectbox("To", codes, index=codes.index("USD") if "USD" in codes else 0)
+# Add input fields for capturing amount, from and to currencies
 
-if st.button("Convert Latest"):
-    try:
-        result = get_latest_rate(from_currency, to_currency, amount)
-        st.text(format_conversion(result))
-    except Exception as exc:  # pragma: no cover - simple user feedback
-        st.error(str(exc))
+# Add a button to get and display the latest rate for selected currencies and amount
 
-date = st.date_input("Date", datetime.date.today())
-if st.button("Convert Historical"):
-    try:
-        result = get_historical_rate(date.isoformat(), from_currency, to_currency, amount)
-        st.text(format_conversion(result))
-    except Exception as exc:  # pragma: no cover - simple user feedback
-        st.error(str(exc))
+# Add a date selector (calendar)
+
+# Add a button to get and display the historical rate for selected date, currencies and amount
+
+
+
+
+
+
+
+
+
+
