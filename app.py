@@ -91,6 +91,7 @@ else:
     st.subheader("Conversion Setup")
     selection_cols = st.columns([2, 3, 3])
 
+
     amount = selection_cols[0].number_input(
         "Amount",
         min_value=0.0,
@@ -177,6 +178,7 @@ else:
 
     if st.session_state.historical_result:
         display_conversion_details(st.session_state.historical_result)
+
 
 
 
