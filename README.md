@@ -1,8 +1,8 @@
 # Currency Converter App
 
 ## Author
-Name: _Not provided_
-Student ID: _Not provided_
+Name: Abhiyan Gautam
+Student ID: 26159119
 
 ## Description
 Interactive Streamlit application that converts currency amounts using the
@@ -17,7 +17,6 @@ chart for the selected currency pair when working with the latest market rate.
   the service is unavailable.
 - Provides numeric input for the amount and dropdowns for selecting source and
   target currencies with sensible defaults.
-
 - Offers buttons to convert using either the latest market rate or a
   user-selected historical date.
 - Shows success messaging, the rounded conversion rate, converted amount, and
@@ -39,15 +38,14 @@ chart for the selected currency pair when working with the latest market rate.
 - Persisting user preferences (e.g., favourite currency pairs) across sessions.
 
 ## How to Setup
-1. Ensure you have **Python 3.9+** installed (the app was built with Python
-   3.10).
+1. Ensure you have **Python 3.9+** installed.
 2. Install the required packages:
    ```bash
    pip install streamlit==1.30.0 requests==2.31.0 pandas==2.2.0
    ```
 
 ## How to Run the Program
-1. Activate your Python environment (virtualenv, Conda, etc.).
+1. Activate your Python environment.
 2. From the project root directory, launch the Streamlit server:
    ```bash
    streamlit run app.py

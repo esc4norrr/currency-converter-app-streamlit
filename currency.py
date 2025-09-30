@@ -75,7 +75,7 @@ def format_output(date, from_currency, to_currency, rate, amount):
 
     return (
         f"The conversion rate on {date} from {from_currency} to {to_currency} was {rounded_rate}. "
-        f"So {amount_rounded} in {from_currency} correspond to {converted_amount} in {to_currency} "
+        f"So {amount_rounded} in {from_currency} correspond to {converted_amount} in {to_currency}. "
         f"The inverse rate was {inverse}."
     )
    
