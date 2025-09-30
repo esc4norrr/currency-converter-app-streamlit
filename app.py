@@ -24,8 +24,9 @@ def load_rate_trend(from_currency: str, to_currency: str, years: int = 2):
     return get_rate_trend(from_currency, to_currency, years)
 
 
-def display_conversion_details(result: dict):
-    """Render the conversion summary, metrics and trend chart."""
+def display_conversion_details(result: dict, *, show_trend: bool = False):
+    """Render the conversion summary, metrics and optional trend chart."""
+
 
     if not result:
         return
@@ -49,18 +50,24 @@ def display_conversion_details(result: dict):
     )
     metric_cols[2].metric("Inverse Rate", f"{inverse_rate}")
 
-    trend_data = load_rate_trend(from_currency, to_currency, years=2)
-    if trend_data:
-        sorted_dates = sorted(trend_data.keys())
-        trend_df = pd.DataFrame(
-            {"Rate": [trend_data[date_key] for date_key in sorted_dates]},
-            index=pd.to_datetime(sorted_dates),
-        )
-        trend_df.index.name = "Date"
-        st.markdown("#### Rate Trend Over the Last 2 Years")
-        st.line_chart(trend_df)
-    else:
-        st.info("Rate trend data is not available right now. Please try again later.")
+    if show_trend:
+        trend_data = load_rate_trend(from_currency, to_currency, years=2)
+        if trend_data:
+            sorted_dates = sorted(trend_data.keys())
+            trend_df = pd.DataFrame(
+                {
+                    "Date": pd.to_datetime(sorted_dates),
+                    "Rate": [trend_data[date_key] for date_key in sorted_dates],
+                }
+            )
+            trend_df["Period"] = trend_df["Date"].dt.strftime("%b %Y")
+            trend_df = trend_df.set_index("Period")[["Rate"]]
+            st.markdown("#### Rate Trend Over the Last 2 Years")
+            st.line_chart(trend_df)
+        else:
+            st.info(
+                "Rate trend data is not available right now. Please try again later."
+            )
 
 
 def reset_results():
@@ -81,28 +88,32 @@ else:
     other_currencies = [code for code in currencies if code != default_from]
     default_to = "USD" if "USD" in other_currencies else (other_currencies[0] if other_currencies else default_from)
 
-    st.session_state.setdefault("from_currency", default_from)
-    st.session_state.setdefault("to_currency", default_to)
-    st.session_state.setdefault("amount_input", 1.0)
-    st.session_state.setdefault("historical_date", datetime.date.today())
-    st.session_state.setdefault("latest_result", None)
-    st.session_state.setdefault("historical_result", None)
+    if "from_currency" not in st.session_state:
+        st.session_state.from_currency = default_from
+    if "to_currency" not in st.session_state:
+        st.session_state.to_currency = default_to
+    if "amount_input" not in st.session_state:
+        st.session_state.amount_input = 1.0
+    if "historical_date" not in st.session_state:
+        st.session_state.historical_date = datetime.date.today()
+    if "latest_result" not in st.session_state:
+        st.session_state.latest_result = None
+    if "historical_result" not in st.session_state:
+        st.session_state.historical_result = None
 
     st.subheader("Conversion Setup")
-    selection_cols = st.columns([2, 3, 3])
-
-
-    amount = selection_cols[0].number_input(
+    amount = st.number_input(
         "Amount",
         min_value=0.0,
-        value=st.session_state.amount_input,
         key="amount_input",
         step=0.01,
         format="%.2f",
         on_change=reset_results,
     )
 
-    from_currency = selection_cols[1].selectbox(
+    currency_cols = st.columns(2)
+
+    from_currency = currency_cols[0].selectbox(
         "From",
         currencies,
         index=currencies.index(st.session_state.from_currency)
@@ -112,7 +123,7 @@ else:
         on_change=reset_results,
     )
 
-    to_currency = selection_cols[2].selectbox(
+    to_currency = currency_cols[1].selectbox(
         "To",
         currencies,
         index=currencies.index(st.session_state.to_currency)
@@ -144,14 +155,14 @@ else:
                 }
 
     if st.session_state.latest_result:
-        display_conversion_details(st.session_state.latest_result)
+        display_conversion_details(st.session_state.latest_result, show_trend=True)
+
 
     st.divider()
 
     st.write("Look up the conversion rate for a specific date in the past.")
     selected_date = st.date_input(
         "Select Date",
-        value=st.session_state.historical_date,
         key="historical_date",
         max_value=datetime.date.today(),
         on_change=reset_results,
@@ -178,14 +189,3 @@ else:
 
     if st.session_state.historical_result:
         display_conversion_details(st.session_state.historical_result)
-
-
-
-
-
-
-
-
-
-
-
