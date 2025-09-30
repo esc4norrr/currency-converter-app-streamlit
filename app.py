@@ -89,7 +89,8 @@ else:
     st.session_state.setdefault("historical_result", None)
 
     st.subheader("Conversion Setup")
-    selection_cols = st.columns([2, 3, 1, 3])
+    selection_cols = st.columns([2, 3, 3])
+
 
     amount = selection_cols[0].number_input(
         "Amount",
@@ -111,9 +112,7 @@ else:
         on_change=reset_results,
     )
 
-    swap_clicked = selection_cols[2].button("🔄 Swap", use_container_width=True, type="secondary")
-
-    to_currency = selection_cols[3].selectbox(
+    to_currency = selection_cols[2].selectbox(
         "To",
         currencies,
         index=currencies.index(st.session_state.to_currency)
@@ -123,76 +122,63 @@ else:
         on_change=reset_results,
     )
 
-    if swap_clicked:
-        st.session_state.from_currency, st.session_state.to_currency = (
-            st.session_state.to_currency,
-            st.session_state.from_currency,
-        )
-        reset_results()
-        st.experimental_rerun()
+    st.divider()
+
+    st.write("Get the most recent conversion rate available from the Frankfurter API.")
+    if st.button("Convert using latest rate", key="latest_button", use_container_width=True):
+        if amount <= 0:
+            st.warning("Please enter an amount greater than zero to convert.")
+        else:
+            with st.spinner("Fetching latest rate..."):
+                date, rate = get_latest_rates(from_currency, to_currency, amount)
+            if rate is None or date is None:
+                st.error("Unable to fetch latest conversion rate.")
+                st.session_state.latest_result = None
+            else:
+                st.session_state.latest_result = {
+                    "date": date,
+                    "rate": rate,
+                    "amount": amount,
+                    "from_currency": from_currency,
+                    "to_currency": to_currency,
+                }
+
+    if st.session_state.latest_result:
+        display_conversion_details(st.session_state.latest_result)
 
     st.divider()
 
-    latest_tab, historical_tab = st.tabs(["Latest Rate", "Historical Rate"])
+    st.write("Look up the conversion rate for a specific date in the past.")
+    selected_date = st.date_input(
+        "Select Date",
+        value=st.session_state.historical_date,
+        key="historical_date",
+        max_value=datetime.date.today(),
+        on_change=reset_results,
+    )
 
-    with latest_tab:
-        st.write("Get the most recent conversion rate available from the Frankfurter API.")
-        if st.button("Convert using latest rate", key="latest_button", use_container_width=True):
-            if amount <= 0:
-                st.warning("Please enter an amount greater than zero to convert.")
+    if st.button("Convert using historical rate", key="historical_button", use_container_width=True):
+        if amount <= 0:
+            st.warning("Please enter an amount greater than zero to convert.")
+        else:
+            date_str = selected_date.strftime("%Y-%m-%d")
+            with st.spinner("Fetching historical rate..."):
+                rate = get_historical_rate(from_currency, to_currency, date_str, amount)
+            if rate is None:
+                st.error("Unable to fetch historical conversion rate.")
+                st.session_state.historical_result = None
             else:
-                with st.spinner("Fetching latest rate..."):
-                    date, rate = get_latest_rates(from_currency, to_currency, amount)
-                if rate is None or date is None:
-                    st.error("Unable to fetch latest conversion rate.")
-                    st.session_state.latest_result = None
-                else:
-                    st.session_state.latest_result = {
-                        "date": date,
-                        "rate": rate,
-                        "amount": amount,
-                        "from_currency": from_currency,
-                        "to_currency": to_currency,
-                    }
+                st.session_state.historical_result = {
+                    "date": date_str,
+                    "rate": rate,
+                    "amount": amount,
+                    "from_currency": from_currency,
+                    "to_currency": to_currency,
+                }
 
-        if st.session_state.latest_result:
-            display_conversion_details(st.session_state.latest_result)
+    if st.session_state.historical_result:
+        display_conversion_details(st.session_state.historical_result)
 
-    with historical_tab:
-        st.write("Look up the conversion rate for a specific date in the past.")
-        selected_date = st.date_input(
-            "Select Date",
-            value=st.session_state.historical_date,
-            key="historical_date",
-            max_value=datetime.date.today(),
-            on_change=reset_results,
-        )
-
-        if st.button(
-            "Convert using historical rate",
-            key="historical_button",
-            use_container_width=True,
-        ):
-            if amount <= 0:
-                st.warning("Please enter an amount greater than zero to convert.")
-            else:
-                date_str = selected_date.strftime("%Y-%m-%d")
-                with st.spinner("Fetching historical rate..."):
-                    rate = get_historical_rate(from_currency, to_currency, date_str, amount)
-                if rate is None:
-                    st.error("Unable to fetch historical conversion rate.")
-                    st.session_state.historical_result = None
-                else:
-                    st.session_state.historical_result = {
-                        "date": date_str,
-                        "rate": rate,
-                        "amount": amount,
-                        "from_currency": from_currency,
-                        "to_currency": to_currency,
-                    }
-
-        if st.session_state.historical_result:
-            display_conversion_details(st.session_state.historical_result)
 
 
 
