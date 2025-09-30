@@ -11,11 +11,13 @@ the most recent exchange rate or a historical rate for a chosen date, and then
 displays a detailed breakdown of the conversion along with a two-year trend
 chart for the selected currency pair when working with the latest market rate.
 
+
 ### Highlights
 - Fetches available currencies from Frankfurter with graceful error handling if
   the service is unavailable.
 - Provides numeric input for the amount and dropdowns for selecting source and
   target currencies with sensible defaults.
+
 - Offers buttons to convert using either the latest market rate or a
   user-selected historical date.
 - Shows success messaging, the rounded conversion rate, converted amount, and
@@ -23,6 +25,7 @@ chart for the selected currency pair when working with the latest market rate.
 - Renders a line chart highlighting the trend over the last two years for the
   selected currency pair after a latest-rate conversion, with labels that pair
   month abbreviations and years for clarity.
+
 
 ### Challenges
 - Handling API connectivity failures and ensuring the UI communicates issues to

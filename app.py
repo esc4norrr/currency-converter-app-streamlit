@@ -27,6 +27,7 @@ def load_rate_trend(from_currency: str, to_currency: str, years: int = 2):
 def display_conversion_details(result: dict, *, show_trend: bool = False):
     """Render the conversion summary, metrics and optional trend chart."""
 
+
     if not result:
         return
 
@@ -156,6 +157,7 @@ else:
     if st.session_state.latest_result:
         display_conversion_details(st.session_state.latest_result, show_trend=True)
 
+
     st.divider()
 
     st.write("Look up the conversion rate for a specific date in the past.")
@@ -187,13 +189,3 @@ else:
 
     if st.session_state.historical_result:
         display_conversion_details(st.session_state.historical_result)
-
-
-
-
-
-
-
-
-
-
